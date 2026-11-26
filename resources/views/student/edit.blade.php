@@ -1,106 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Student</title>
-</head>
-<body>
+<x-layout title="Edit Student">
+    <h1>Edit Student</h1>
 
-<h1>Edit Student</h1>
-
-@if($errors->any())
-    <div>
-        <h3>Please fix the following errors:</h3>
-
+    <form action="{{ route('students.update', $student) }}" method="POST">
+        @if ($errors->any())
         <ul>
             @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
+            <li>{{ $error }}</li>
             @endforeach
         </ul>
-    </div>
-@endif
-
-<form
-    action="/students/{{ $student->id }}"
-    method="POST"
->
-
-    @csrf
-    @method('PUT')
-
-    <div>
-        <label for="name">Name</label>
-
-        <input
-            type="text"
-            id="name"
-            name="name"
-            value="{{ old('name', $student->name) }}"
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="email">Email</label>
-
-        <input
-            type="email"
-            id="email"
-            name="email"
-            value="{{ old('email', $student->email) }}"
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="phone">Phone</label>
-
-        <input
-            type="text"
-            id="phone"
-            name="phone"
-            value="{{ old('phone', $student->phone) }}"
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="address">Address</label>
-
-        <textarea
-            id="address"
-            name="address"
-        >{{ old('address', $student->address) }}</textarea>
-    </div>
-
-    <br>
-
-    <div>
-        <label for="date_of_birth">Date of Birth</label>
-
-        <input
-            type="date"
-            id="date_of_birth"
-            name="date_of_birth"
-            value="{{ old('date_of_birth', $student->date_of_birth) }}"
-        >
-    </div>
-
-    <br>
-
-    <button type="submit">
-        Update Student
-    </button>
-
-</form>
-
-<br>
-
-<a href="/students">
-    Back to Students
-</a>
-
-</body>
-</html>
+        @endif
+        @csrf()
+        @method("PUT")
+        <label>Name:</label>
+        <input name="name" value="{{ old('name', $student->name) }}" required maxlength="100" />
+        <br />
+        <label>Email:</label>
+        <input name="email" type="email" value="{{ old('email', $student->email) }}" required maxlength="256" />
+        <br />
+        <label>Phone:</label>
+        <input name="phone" value="{{ old('phone', $student->phone) }}" maxlength="20" />
+        <br />
+        <label>Address:</label>
+        <textarea name="address">{{ old('address', $student->address) }}</textarea>
+        <br />
+        <label>Date of Birth:</label>
+        <input name="date_of_birth" type="date"
+       value="{{ old('date_of_birth', $student->date_of_birth->format('Y-m-d')) }}"
+       required />        <br />
+        <button>Edit</button>
+    </form>
+</x-layout>
