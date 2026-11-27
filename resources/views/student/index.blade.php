@@ -2,46 +2,54 @@
     <h1>Students</h1>
 
     @if (session('success'))
-    <div>{{ session('success') }}</div>
+        <div class="success">{{ session('success') }}</div>
     @endif
-    <a href="/students/create">Create New Student</a>
+
+    <a class="btn" href="{{ route('students.create') }}">Add New Student</a>
 
     @if ($students->isNotEmpty())
-    <table>
-        <th>
-        <td>Id</td>
-        <td>Name</td>
-        <td>Email</td>
-        <td>Phone</td>
-        <td>Address</td>
-        <td>Age</td>
-        <td>Action</td>
-        </th>
-        @foreach($students as $student)
-        <tr>
-            <td>{{ $student->id }}</td>
-            <td>{{ $student->name }}</td>
-            <td>{{ $student->email }}</td>
-            <td>{{ $student->phone }}</td>
-            <td>{{ $student->address }}</td>
-            <td>{{ $student->age }}</td>
-            <td>
-                <form action="students/{{ $student->id }}" method="POST">
-                    @method("DELETE")
-                    @csrf()
-                    <button>Delete</button>
-                </form>
-                <a role="button" href="students/{{ $student->id }}/edit">
-                    Edit
-                </a>
-                <a role="button" href="students/{{ $student->id }}">
-                    Details
-                </a>
-            </td>
-        </tr>
-        @endforeach
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Age</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($students as $student)
+                    <tr>
+                        <td>{{ $student->id }}</td>
+                        <td>{{ $student->name }}</td>
+                        <td>{{ $student->email }}</td>
+                        <td>{{ $student->phone }}</td>
+                        <td>{{ $student->address }}</td>
+                        <td>{{ $student->age }}</td>
+                        <td>
+                            <a href="{{ route('students.show', $student) }}">View</a> |
+                            <a href="{{ route('students.edit', $student) }}">Edit</a>
+
+                            <form action="{{ route('students.destroy', $student) }}"
+                                  method="POST"
+                                  style="display:inline; padding:0; border:0;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger"
+                                        onclick="return confirm('Delete this student?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @else
-    <h2>No student record available</h2>
+        <p>No student records available.</p>
     @endif
 </x-layout>
